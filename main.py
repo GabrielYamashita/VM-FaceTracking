@@ -13,7 +13,7 @@ config = [True, False, True] # showFps, showDraw, showAreaBox
 
 cam = Camera(camLoc, camAPI, config=config) 
 detector = Detectors()
-PID = FacePID([1, 0.000000000001, 1])
+PID = FacePID(detector)
 
 
 # Loop Principal

@@ -10,6 +10,7 @@ class Camera:
         self.showFps, self.showDraw, self.showAreaBox = config
         self.initColors()
         self.stopCamera = False
+        self.currFrame = 0
 
 
     def initColors(self):
@@ -39,7 +40,8 @@ class Camera:
             self.wImg, self.hImg, _ = img.shape
 
             # Execução do Detector
-            self.operation(img, PID, self.showDraw, self.showAreaBox)
+            if self.skipFrame(10):
+                self.operation(img, PID, self.showDraw, self.showAreaBox)
 
             # Desenha Eixos
             # if self.showDraw == True:
@@ -75,6 +77,17 @@ class Camera:
 
         print("- Câmera Desliga")
 
+
+    def skipFrame(self, qntFrames):
+        self.currFrame += 1
+            
+        if self.currFrame != qntFrames:
+            return False
+
+        else:
+            self.currFrame = 0
+            return True
+
     def updateValue(self, value):
         self.showFps = not self.showFps if value == "fps" else self.showFps # Inverte Estado do 
         self.showDraw = not self.showDraw if value == "draw" else self.showDraw # Inverte Estado do draw
@@ -88,7 +101,7 @@ class Camera:
         # centerHand, areaHand, bboxHand, typeHand = infoHand # desempacotamento das informações
         # xHand, yHand, wHand, hHand = bboxHand # desempacotamento das informações da Bounding Box
         # # print(f"\nINFO HAND: {infoHand}")
-
+        
 
         # Baseado na Base do Rôbo
         x = 85
