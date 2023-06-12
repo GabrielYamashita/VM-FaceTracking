@@ -96,18 +96,16 @@ class Camera:
 
 
     def operation(self, img, PID, draw, areaBox):
-        # # Hand Detection
-        # img, infoHand = detector.HandDetector(img, draw=draw, areaBox=areaBox) # recebimento de imagem e dados da Mão
-        # centerHand, areaHand, bboxHand, typeHand = infoHand # desempacotamento das informações
-        # xHand, yHand, wHand, hHand = bboxHand # desempacotamento das informações da Bounding Box
-        # # print(f"\nINFO HAND: {infoHand}")
-        
+        # Recebe Comando Pela Mão
+        img, comando = PID.handCommand(img, draw, areaBox)
+        print(comando)
 
+        # Calcula Erro com PID da Face
         # Baseado na Base do Rôbo
         x = 85
         y = self.hImg // 2
         z = self.wImg // 2
-        img, offsets = PID.calculaErro(img, x, y, z, draw, areaBox)
+        # img, offsets = PID.calculaErro(img, x, y, z, draw, areaBox)
         # print(offsets)
 
 

@@ -12,8 +12,11 @@ class FacePID:
         self.ur5 = Robot('169.254.66.125', 30000)
 
     
-    def enviaComando(self, img, draw, areaBox):
-        pass
+    def handCommand(self, img, draw, areaBox):
+        img, infoHand = self.detector.HandDetector(img, draw=draw, areaBox=areaBox) # recebimento de imagem e dados da Mão
+        centerHand, areaHand, bboxHand, typeHand = infoHand # desempacotamento das informações
+        xHand, yHand, wHand, hHand = bboxHand # desempacotamento das informações da Bounding Box
+        print(f"\nINFO HAND: {infoHand}")
 
 
     def calculaErro(self, img, xTarget, yTarget, zTarget, draw, areaBox):
@@ -65,21 +68,21 @@ class FacePID:
 
 
     def setOffsets(self, x, y, z):
-        if x <= 25 and x >= -25:
+        if x <= 15 and x >= -15:
             # print("PAROU EM X")
             self.ur5.setpointDiffX(0)
         else:
             # print("MOVENDO EM -X")
             self.ur5.setpointDiffX(x)
 
-        if y <= 100 and y >= -100:
+        if y <= 50 and y >= -50:
             # print("PAROU EM Y")
             self.ur5.setpointDiffY(0)
         else:
             # print("MOVENDO EM -Y")
             self.ur5.setpointDiffY(y)
 
-        if z <= 100 and z >= -100:
+        if z <= 50 and z >= -50:
             # print("PAROU EM Z")
             self.ur5.setpointDiffZ(0)
         else:
