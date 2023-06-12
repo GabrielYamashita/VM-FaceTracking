@@ -31,7 +31,7 @@ class Robot:
 
     def sendCommandTest(self):
         print("\nconnect()")
-        print(f"Sent: ({self.x}, {self.y}, {self.z})")
+        print(f"Sent: ({self.x}, {self.y}, {self.z}, {self.command})")
         print("disconnect()\n")
 
 

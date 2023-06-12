@@ -49,6 +49,7 @@ class Detectors:
       areaHand = 0
       bboxHand = [0,0,0,0]
       typeHand = 0
+      fingers = [0,0,0,0,0]
 
       if hands:
          if hands[0]:
@@ -65,11 +66,25 @@ class Detectors:
                cv2.rectangle(img, (xHand,yHand), (xHand+wHand, yHand+hHand), self.RED, 2) # imagem, começo do retângulo, final do retângulo, cor, espessura
                cv2.circle(img, (centerHand[0], centerHand[1]), 5, self.GREEN, -1) # imagem, coord do centro, raio, cor, grossura
 
-      return img, [ centerHand, areaHand, bboxHand, typeHand ] # 0: Centros = cx, cy, 1: Área = area, 2: Bounding Box = x,y,w,h, 3: Lado da Mão = typeHand
+            fingers = self.handDetector.fingersUp(hand)
+
+      return img, [ centerHand, areaHand, bboxHand, typeHand, fingers ] # 0: Centros = cx, cy, 1: Área = area, 2: Bounding Box = x,y,w,h, 3: Lado da Mão = typeHand
 
 
-   def handCommand(self):
-      pass
+   def handCommand(self, fingers):
+      comando = 0
+      if fingers != [0,0,0,0,0]:
+
+         if fingers == [0,1,0,0,0]:
+            comando = 1
+
+         elif fingers == [0,1,1,0,0]:
+            comando = 2
+
+         elif fingers == [1,0,0,0,1]:
+            comando = 3
+
+      return comando
 
 
    def FaceDetector(self, img, draw=True, areaBox=False):

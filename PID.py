@@ -12,11 +12,16 @@ class FacePID:
         self.ur5 = Robot('169.254.66.125', 30000)
 
     
-    def handCommand(self, img, draw, areaBox):
+    def sendHandCommand(self, img, draw, areaBox):
         img, infoHand = self.detector.HandDetector(img, draw=draw, areaBox=areaBox) # recebimento de imagem e dados da Mão
-        centerHand, areaHand, bboxHand, typeHand = infoHand # desempacotamento das informações
+        centerHand, areaHand, bboxHand, typeHand, fingers = infoHand # desempacotamento das informações
         xHand, yHand, wHand, hHand = bboxHand # desempacotamento das informações da Bounding Box
-        print(f"\nINFO HAND: {infoHand}")
+        # print(fingers)
+
+        comando = self.detector.handCommand(fingers)
+        self.ur5.setHandCommand(comando)
+
+        return img, comando
 
 
     def calculaErro(self, img, xTarget, yTarget, zTarget, draw, areaBox):
@@ -45,8 +50,8 @@ class FacePID:
         if infoFace != [ [0,0], 0, [0,0,0,0] ]:
             # offsets[1] = int(-yPID.update(centerFace[0]))
             # offsets[2] = int(-zPID.update(centerFace[1]))
-            offsets[1] = int(-yPIDteste(centerFace[0]))
-            offsets[2] = int(-zPIDteste(centerFace[1]))
+            offsets[1] = int(yPIDteste(centerFace[0]))
+            offsets[2] = int(zPIDteste(centerFace[1]))
 
             # Desenha Eixos de X e Z
             if draw or areaBox:
@@ -72,26 +77,26 @@ class FacePID:
             # print("PAROU EM X")
             self.ur5.setpointDiffX(0)
         else:
-            # print("MOVENDO EM -X")
+            # print("MOVENDO EM X")
             self.ur5.setpointDiffX(x)
 
         if y <= 50 and y >= -50:
             # print("PAROU EM Y")
             self.ur5.setpointDiffY(0)
         else:
-            # print("MOVENDO EM -Y")
+            # print("MOVENDO EM Y")
             self.ur5.setpointDiffY(y)
 
         if z <= 50 and z >= -50:
             # print("PAROU EM Z")
             self.ur5.setpointDiffZ(0)
         else:
-            # print("MOVENDO EM -Z")
+            # print("MOVENDO EM Z")
             self.ur5.setpointDiffZ(z)
 
         # print(self.ur5.x, self.ur5.y, self.ur5.z)
 
-        self.ur5.sendCommandTest()
+        self.ur5.sendCommand()
 
 
 
